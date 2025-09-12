@@ -11,5 +11,8 @@
     "url": "git+https://github.com/adnan-mohammed7/fragments-ui.git"
   },
   "author": "Adnan Mohammed",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "parcel": "^2.15.4"
+  }
 }
