@@ -1,6 +1,7 @@
 // src/app.js
 
 import { signIn, getUser } from './auth';
+import { getUserFragments } from './api';
 
 async function init() {
   // Get our UI elements
@@ -27,6 +28,8 @@ async function init() {
 
   // Disable the Login button
   loginBtn.disabled = true;
+
+  const userFragments = await getUserFragments(user);
 }
 
 // Wait for the DOM to be ready, then start the app
