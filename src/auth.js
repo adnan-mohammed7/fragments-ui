@@ -24,6 +24,22 @@ export async function signIn() {
   await userManager.signinRedirect();
 }
 
+export async function signOut() {
+  const user = await userManager.getUser();
+  if (!user) {
+    await userManager.removeUser();
+    return;
+  }
+
+  const logoutUrl = `https://us-east-1hftwial9o.auth.us-east-1.amazoncognito.com/logout?client_id=${process.env.AWS_COGNITO_CLIENT_ID}&logout_uri=${encodeURIComponent("http://localhost:1234")}&id_token_hint=${user.id_token}`;
+
+  // First clear local session
+  await userManager.removeUser();
+
+  // Then redirect to Cognito logout
+  window.location.href = logoutUrl;
+}
+
 // Create a simplified view of the user, with an extra method for creating the auth headers
 function formatUser(user) {
   console.log('User Authenticated', { user });
