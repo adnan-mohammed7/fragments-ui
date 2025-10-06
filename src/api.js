@@ -32,7 +32,6 @@ export async function getUserFragments(user) {
 
 export async function addFragment(user, { contentType, body }) {
   console.log('Posting fragment data...');
-  console.log({ contentType, body })
   try {
     const fragmentsUrl = new URL('/v1/fragments', apiUrl);
     const header = new Headers();
@@ -52,8 +51,7 @@ export async function addFragment(user, { contentType, body }) {
       throw new Error(`${res.status} ${res.statusText}`);
     }
     const result = await res.json();
-    console.log("RESULT")
-    console.log(result)
+    console.log("Fragment created!")
     return result;
   } catch (err) {
     console.error('Unable to call POST /v1/fragment', { err });

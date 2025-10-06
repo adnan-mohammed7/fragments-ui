@@ -9,6 +9,8 @@ async function init() {
   const loginBtn = document.querySelector('#login');
   const logoutBtn = document.querySelector('#logout');
   const createFragmentBtn = document.querySelector(`#createFragment`);
+  const textPlainSection = document.querySelector(`#textplain`)
+  const textPlain = document.querySelector(`#fragment-text-plain`)
 
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
@@ -21,11 +23,21 @@ async function init() {
   };
 
   createFragmentBtn.onclick = async () => {
-    const createUser = await addFragment(user, { contentType: "text/plain", body: "This is a fragment" });
-    console.log(createUser)
+    if (!user) return;
+    if (createFragmentBtn.disabled) return;
+
+    const body = textPlain.value;
+    createFragmentBtn.disabled = true;
+    try {
+      const created = await addFragment(user, { contentType: 'text/plain', body });
+      console.log(created);
+      textPlain.value = '';
+      enableCreateBtn();
+    } catch (error) {
+      console.log(error);
+      enableCreateBtn();
+    }
   }
-
-
 
   // See if we're signed in (i.e., we'll have a `user` object)
   const user = await getUser();
@@ -44,10 +56,17 @@ async function init() {
   loginBtn.disabled = true;
 
   logoutBtn.disabled = false;
-  createFragmentBtn.disabled = false;
 
   const userFragments = await getUserFragments(user);
 
+  const enableCreateBtn = () => {
+    const hasText = textPlain.value.trim().length > 0;
+    createFragmentBtn.disabled = !user || !hasText;
+  };
+  textPlain.addEventListener("input", enableCreateBtn);
+
+  textPlainSection.hidden = false;
+  enableCreateBtn();
 }
 
 // Wait for the DOM to be ready, then start the app
