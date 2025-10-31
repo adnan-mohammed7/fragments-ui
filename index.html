@@ -17,13 +17,32 @@
       <button id="createFragment">Create</button>
     </nav>
   </section>
+
   <section hidden id="user">
     <h2>Hello <span class="username"></span>!</h2>
   </section>
-  <section hidden id="textplain" style="margin: 10px;">
-    <label for="fragment-text-plain">Enter fragment (text/plain):</label>
-    <textarea id="fragment-text-plain" placeholder="Type your fragment here..."></textarea>
+
+  <section style="margin: 10px;">
+    <label for="fragment-type">Select fragment type:</label>
+    <select id="fragment-type">
+      <option value="text/plain">Text/plain</option>
+      <option value="text/markdown">Text/markdown</option>
+      <option value="text/html">Text/html</option>
+      <option value="text/csv">Text/csv</option>
+      <option value="application/json">Application/json</option>
+    </select>
   </section>
+
+  <section style="margin: 10px;">
+    <label for="fragment-content">Enter fragment content:</label>
+    <textarea id="fragment-content" placeholder="Type your fragment here..."></textarea>
+  </section>
+
+  <section hidden id="fragments-list" style="margin: 10px;">
+  <h2>Your Fragments</h2>
+  <ul id="fragments-ul"></ul>
+</section>
+
 </body>
 
 </html>

@@ -10,9 +10,8 @@ const apiUrl = process.env.API_URL;
  */
 export async function getUserFragments(user) {
   console.log('Requesting user fragments data...');
-  console.log(`${process.env.API_URL}`);
   try {
-    const fragmentsUrl = new URL('/v1/fragments', apiUrl);
+    const fragmentsUrl = new URL('/v1/fragments?expand=1', apiUrl);
     const res = await fetch(fragmentsUrl, {
       // Generate headers with the proper Authorization bearer token to pass.
       // We are using the `authorizationHeaders()` helper method we defined
@@ -27,6 +26,24 @@ export async function getUserFragments(user) {
     return data;
   } catch (err) {
     console.error('Unable to call GET /v1/fragment', { err });
+  }
+}
+
+// Fetch fragment data by ID for authenticated user
+export async function getFragmentData(user, fragmentId) {
+  try {
+    const fragmentUrl = new URL(`/v1/fragments/${fragmentId}`, apiUrl);
+    const res = await fetch(fragmentUrl, {
+      headers: user.authorizationHeaders(),
+    });
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.error}`);
+    }
+    console.log(res);
+    const data = await res.text();
+    return data;
+  } catch (err) {
+    console.error(`Unable to call GET /v1/fragments/${fragmentId}`, { err });
   }
 }
 
