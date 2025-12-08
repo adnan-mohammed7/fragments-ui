@@ -8,6 +8,7 @@
   <script type="module" src="src/app.js"></script>
 </head>
 
+
 <body>
   <h1>Fragments UI</h1>
   <section>
@@ -25,10 +26,17 @@
   <section style="margin: 10px;">
     <label for="fragment-type">Select fragment type:</label>
     <select id="fragment-type">
-      <option value="text/plain">Text/plain</option>
-      <option value="text/markdown">Text/markdown</option>
-      <option value="text/html">Text/html</option>
-      <option value="application/json">Application/json</option>
+      <option value="text/plain">text/plain</option>
+      <option value="text/markdown">text/markdown</option>
+      <option value="text/html">text/html</option>
+      <option value="text/csv">text/csv</option>
+      <option value="application/json">application/json</option>
+      <option value="application/yaml">application/yaml</option>
+      <option value="image/png">image/png</option>
+      <option value="image/jpeg">image/jpeg</option>
+      <option value="image/webp">image/webp</option>
+      <option value="image/avif">image/avif</option>
+      <option value="image/gif">image/gif</option>
     </select>
   </section>
 
@@ -38,9 +46,9 @@
   </section>
 
   <section hidden id="fragments-list" style="margin: 10px;">
-  <h2>Your Fragments</h2>
-  <ul id="fragments-ul"></ul>
-</section>
+    <h2>Your Fragments</h2>
+    <ul id="fragments-ul"></ul>
+  </section>
 
 </body>
 

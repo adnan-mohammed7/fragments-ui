@@ -19,7 +19,7 @@ export async function getUserFragments(user) {
       headers: user.authorizationHeaders(),
     });
     if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
+      throw new Error(`${res.status} ${res.error}`);
     }
     const data = await res.json();
     console.log('Successfully got user fragments data', { data });
@@ -65,12 +65,105 @@ export async function addFragment(user, { contentType, body }) {
     });
 
     if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
+      throw new Error(`${res.status} ${res.error}`);
     }
     const result = await res.json();
     console.log("Fragment created!")
     return result;
   } catch (err) {
     console.error('Unable to call POST /v1/fragment', { err });
+  }
+}
+
+export async function updateFragment(user, id, { contentType, body }) {
+  console.log(`Updating fragment ${id}...`);
+  try {
+    const fragmentUrl = new URL(`/v1/fragments/${id}`, apiUrl);
+    const headers = new Headers();
+    headers.set('Content-Type', contentType);
+    const auth = user.authorizationHeaders();
+    if (auth?.Authorization) {
+      headers.set('Authorization', auth.Authorization);
+    }
+
+    const res = await fetch(fragmentUrl, {
+      method: 'PUT',
+      headers,
+      body,
+    });
+
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.error}`);
+    }
+    const data = await res.json();
+    console.log('Fragment updated', { data });
+    return data;
+  } catch (err) {
+    console.error(`Unable to call PUT /v1/fragments/${id}`, { err });
+  }
+}
+
+export async function deleteFragment(user, id) {
+  console.log(`Deleting fragment ${id}...`);
+  try {
+    const fragmentUrl = new URL(`/v1/fragments/${id}`, apiUrl);
+    const res = await fetch(fragmentUrl, {
+      method: 'DELETE',
+      headers: user.authorizationHeaders(),
+    });
+
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.error}`);
+    }
+    console.log('Fragment deleted');
+    return true;
+  } catch (err) {
+    console.error(`Unable to call DELETE /v1/fragments/${id}`, { err });
+    return false;
+  }
+}
+
+export async function getFragmentBinary(user, fragmentId) {
+  try {
+    const fragmentUrl = new URL(`/v1/fragments/${fragmentId}`, apiUrl);
+    const res = await fetch(fragmentUrl, { headers: user.authorizationHeaders() });
+    if (!res.ok) throw new Error(`${res.status} ${res.error}`);
+    return await res.blob();
+  } catch (err) {
+    console.error(`Unable to get Image Fragment: ${fragmentId}, ${err}`)
+  }
+
+}
+
+
+// Get a converted fragment (text)
+export async function getConvertedFragment(user, fragmentId, ext) {
+  try {
+    const fragmentUrl = new URL(`/v1/fragments/${fragmentId}.${ext}`, apiUrl);
+    console.log(fragmentUrl);
+    const res = await fetch(fragmentUrl, {
+      headers: user.authorizationHeaders(),
+    });
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.error}`);
+    }
+    return await res.text();
+  } catch (err) {
+    console.error(`Unable to call GET /v1/fragments/${fragmentId}.${ext}`, { err });
+  }
+}
+
+export async function getConvertedFragmentBinary(user, fragmentId, ext) {
+  try {
+    const fragmentUrl = new URL(`/v1/fragments/${fragmentId}.${ext}`, apiUrl);
+    const res = await fetch(fragmentUrl, {
+      headers: user.authorizationHeaders(),
+    });
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.error}`);
+    }
+    return await res.blob();
+  } catch (err) {
+    console.error(`Unable to call GET /v1/fragments/${fragmentId}.${ext} (binary)`, { err });
   }
 }
